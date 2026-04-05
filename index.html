@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NtaliGames</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    :root{
+      --bg-dark:#200606;
+      --purple-1:#540d0b;
+      --purple-2:#760000;
+      --accent1:#ff6e6e;
+      --accent2:#ffc67b;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      color: #baa1a4;
+      background-color:var(--bg-dark);
+      /* Composite background: subtle grid + multi-stop radial/linear gradients */
+      background-image:
+        /* vertical grid lines */
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+        /* horizontal grid lines */
+        linear-gradient(0deg, rgba(155, 11, 11, 0.02) 1px, transparent 1px),
+        /* soft vignette */
+        radial-gradient(1200px 600px at 10% 90%, rgba(13, 1, 0, 0.35), transparent 30%),
+        radial-gradient(900px 700px at 90% 10%, rgba(14, 5, 28, 0.662), transparent 30%),
+        linear-gradient(180deg, rgba(8, 1, 1, 0.9) 0%, rgba(32, 13, 5, 0.95) 30%, rgb(3, 1, 9) 100%);
+      background-blend-mode: overlay, overlay, normal, normal, normal;
+      /* grid spacing */
+      background-size: 80px 80px, 80px 80px, auto, auto, auto;
+      /* fallback */
+      color-scheme: dark;
+      display:flex;
+      justify-content:center;
+      text-align:center;
+      padding:48px 24px;
+    }
+
+    /* subtle animated gradient overlay (gloss) */
+    .bg-glow{
+      position:fixed;inset:0;pointer-events:none;mix-blend-mode:soft-light;opacity:0.65;
+      background: radial-gradient(600px 300px at 30% 40%, rgba(255,110,199,0.12), transparent 12%),
+                  radial-gradient(500px 300px at 70% 60%, rgba(123,209,255,0.10), transparent 12%);
+      animation: floatGlow 12s ease-in-out infinite;
+      z-index:0;
+    }
+    @keyframes floatGlow{
+      0%{transform:translateY(0) scale(1)}
+      50%{transform:translateY(-18px) scale(1.02)}
+      100%{transform:translateY(0) scale(1)}
+    }
+
+    .container{position:relative;z-index:2;max-width:1100px;width:100%;}
+    .tag{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;background:rgba(0,0,0,0.18);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.04);font-size:14px;margin-bottom:22px}
+
+    h1{font-size:clamp(36px,6vw,96px);line-height:0.95;margin:0;font-weight:800;letter-spacing:-1px}
+    h1 .grad{background:linear-gradient(90deg,var(--accent1), #c17, var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;padding-left:6px}
+
+    p.lead{color:rgba(255,255,255,0.85);opacity:0.95;margin:20px 0 36px;font-size:clamp(14px,1.6vw,20px)}
+
+    .btns{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.06);text-decoration:none;color:white;font-weight:600}
+    .btn.primary{background:linear-gradient(90deg,var(--accent1), #ff416c);box-shadow:0 6px 24px rgba(255,92,150,0.12);border:none}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);opacity:0.9}
+
+    /* scroll indicator */
+    .scroll-indicator{margin-top:48px;display:flex;flex-direction:column;align-items:center;gap:10px;color:rgba(255,255,255,0.6);font-size:13px}
+    .mouse{width:28px;height:40px;border:1.8px solid rgba(255,255,255,0.08);border-radius:16px;position:relative}
+    .wheel{width:4px;height:6px;background:rgba(255,255,255,0.18);position:absolute;left:50%;transform:translateX(-50%);top:8px;border-radius:2px;animation:wheelMove 1.6s infinite}
+    @keyframes wheelMove{0%{transform:translate(-50%,0);opacity:1}50%{transform:translate(-50%,8px);opacity:.4}100%{transform:translate(-50%,0);opacity:1}}
+
+    /* responsiveness tweaks */
+    @media (max-width:640px){
+      .tag{font-size:13px;padding:6px 14px}
+      p.lead{margin:18px 0 28px}
+    }
+    .games-section {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .game-card {
+      background: #111;
+      color: white;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .game-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .game-header h3 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .arrow {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .game-preview {
+      margin-top: 10px;
+      color: #bbb;
+      font-size: 1rem;
+    }
+
+    .game-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, margin-top 0.3s ease;
+    }
+
+    .game-card.active .game-content {
+      max-height: 1200px;
+      margin-top: 20px;
+    }
+
+    .game-card.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    .game-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .game-gallery img {
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .game-video {
+      margin-top: 25px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 6px 12px;
+      background: #ff3c3c;
+      color: white;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+  <header style="position:fixed;top:0;left:0;width:100%;display:flex;justify-content:center;padding:20px 0;z-index:10;pointer-events:none;">
+  <nav style="display:flex;gap:40px;align-items:center;font-weight:600;pointer-events:auto;">
+    <a href="#games" style="text-decoration:none;color:white;opacity:.8;">Games</a>
+    <a href="#home" style="text-decoration:none;color:white;opacity:.8; font-family: 'Dancing Script', cursive;">NtaliGames</a>
+    <a href="#socials" style="text-decoration:none;color:white;opacity:.8;">Socials</a>
+  </nav>
+</header>
+<hr style="margin-top:-20px; border:none; height:3px; background:lch(100% 0.01 296.81 / 0.2); width:25%; max-width:1100px; position:fixed; top:72px; left:50%; transform:translateX(-50%); z-index:10; pointer-events:none;">
+
+<div class="container">
+  <section id="home" style="height:100vh; display:flex; align-items:center; justify-content:center;">
+    <h1>Welcome to NtaliGames</h1>
+    
+  </section>
+  <section id="games" class="games-section">
+    <h2>Games</h2>
+
+    <div class="game-card" onclick="toggleGameCard(this)">
+      <div class="game-header">
+        <div>
+          <h3>Rush Track</h3>
+          <span class="badge">Coming Soon</span>
+        </div>
+        <span class="arrow">▼</span>
+      </div>
+
+      <div class="game-preview">
+        A fast-paced rail adventure where danger, speed, and survival meet.
+      </div>
+
+      <div class="game-content">
+
+        <div class="game-gallery">
+          <img src="rushtrack1.jpg" alt="Rush Track screenshot 1">
+          <img src="rushtrack2.jpg" alt="Rush Track screenshot 2">
+        </div>
+
+        <div class="game-video">
+          <iframe 
+            width="100%" 
+            height="315"
+            src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+            title="Rush Track Trailer"
+            frameborder="0"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="socials" style="height: 50vh; display:flex; align-items:center; justify-content:center;">
+    <button style=" background: linear-gradient(90deg, var(--accent1), #ff416c); 
+                    border: none; 
+                    margin-right: 10px;
+                    border-radius: 999px; 
+                    padding: 12px 22px; 
+                    display: inline-flex; 
+                    align-items: center; 
+                    gap: 10px; 
+                    color: white; 
+                    font-weight: 600; 
+                    text-decoration: none;
+                    box-shadow: 0 6px 24px rgba(255, 92, 150, 0.12);"
+            onclick="window.location.href='https://discord.gg/hwse8XRr';">
+       <img src="discord.png" alt="Button Image" width="50" height="50">
+    </button>
+    <button style=" background: linear-gradient(90deg, var(--accent1), #ff416c); 
+                    border: none; 
+                    border-radius: 999px; 
+                    padding: 12px 22px; 
+                    display: inline-flex; 
+                    align-items: center; 
+                    gap: 10px; 
+                    color: white; 
+                    font-weight: 600; 
+                    text-decoration: none;
+                    box-shadow: 0 6px 24px rgba(255, 92, 150, 0.12);"
+            onclick="window.location.href='https://www.facebook.com/profile.php?id=61571863632777';">
+       <img src="facebook.png" alt="Button Image" width="50" height="50">
+    </button>
+    <button style=" background: linear-gradient(90deg, var(--accent1), #ff416c); 
+                    border: none; 
+                    margin-left: 10px;
+                    border-radius: 999px; 
+                    padding: 12px 22px; 
+                    display: inline-flex; 
+                    align-items: center; 
+                    gap: 10px; 
+                    color: white; 
+                    font-weight: 600; 
+                    text-decoration: none;
+                    box-shadow: 0 6px 24px rgba(255, 92, 150, 0.12);"
+            onclick="window.location.href='https://www.instagram.com/ntaligames';">
+       <img src="instagram.png" alt="Button Image" width="50" height="50">
+    </button>
+</div>
+<script>
+  function toggleGameCard(card) {
+    const allCards = document.querySelectorAll(".game-card");
+
+    allCards.forEach(c => {
+      if (c !== card) {
+        c.classList.remove("active");
+      }
+    });
+
+    card.classList.toggle("active");
+  }
+</script>
+</body>
+</html>

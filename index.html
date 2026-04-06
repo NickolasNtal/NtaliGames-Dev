@@ -168,6 +168,51 @@
       font-size: 0.85rem;
       font-weight: bold;
     }
+    .social-item {
+  position: relative;
+  display: inline-block;
+}
+
+.social-preview {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.95);
+  width: 260px;
+  background: rgba(20, 20, 20, 0.96);
+  color: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  z-index: 999;
+}
+
+.social-item:hover .social-preview {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.social-preview img {
+  width: 100%;
+  display: block;
+}
+
+.preview-info {
+  padding: 12px;
+}
+
+.preview-info h3 {
+  margin: 0 0 6px;
+}
+
+.preview-info p {
+  margin: 0;
+  color: #ccc;
+  font-size: 0.9rem;
+}
 
   </style>
 </head>
@@ -223,51 +268,19 @@
       </div>
     </div>
   </section>
-  <section id="socials" style="height: 50vh; display:flex; align-items:center; justify-content:center;">
-    <button style=" background: linear-gradient(90deg, var(--accent1), #ff416c); 
-                    border: none; 
-                    margin-right: 10px;
-                    border-radius: 999px; 
-                    padding: 12px 22px; 
-                    display: inline-flex; 
-                    align-items: center; 
-                    gap: 10px; 
-                    color: white; 
-                    font-weight: 600; 
-                    text-decoration: none;
-                    box-shadow: 0 6px 24px rgba(255, 92, 150, 0.12);"
-            onclick="window.location.href='https://discord.gg/m2h4GrPcTV';">
-       <img src="discord.png" alt="Button Image" width="50" height="50">
-    </button>
-    <button style=" background: linear-gradient(90deg, var(--accent1), #ff416c); 
-                    border: none; 
-                    border-radius: 999px; 
-                    padding: 12px 22px; 
-                    display: inline-flex; 
-                    align-items: center; 
-                    gap: 10px; 
-                    color: white; 
-                    font-weight: 600; 
-                    text-decoration: none;
-                    box-shadow: 0 6px 24px rgba(255, 92, 150, 0.12);"
-            onclick="window.location.href='https://www.facebook.com/profile.php?id=61571863632777';">
-       <img src="facebook.png" alt="Button Image" width="50" height="50">
-    </button>
-    <button style=" background: linear-gradient(90deg, var(--accent1), #ff416c); 
-                    border: none; 
-                    margin-left: 10px;
-                    border-radius: 999px; 
-                    padding: 12px 22px; 
-                    display: inline-flex; 
-                    align-items: center; 
-                    gap: 10px; 
-                    color: white; 
-                    font-weight: 600; 
-                    text-decoration: none;
-                    box-shadow: 0 6px 24px rgba(255, 92, 150, 0.12);"
-            onclick="window.location.href='https://www.instagram.com/ntaligames';">
-       <img src="instagram.png" alt="Button Image" width="50" height="50">
-    </button>
+  <div class="social-item">
+  <a href="https://discord.gg/YOUR_LINK" target="_blank" class="social-btn">
+    <img src="discord.png" alt="Discord">
+  </a>
+
+  <div class="social-preview">
+    <img src="discord-preview.jpg" alt="Discord preview">
+
+    <div class="preview-info">
+      <h3>NtaliGames Discord</h3>
+      <p>Join the community and follow development.</p>
+    </div>
+  </div>
 </div>
 <script>
   function toggleGameCard(card) {
